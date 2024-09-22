@@ -3,10 +3,12 @@ import { encodeURL } from 'hexo-util';
 import type Hexo from '../../hexo';
 
 /**
- * Asset image tag
+ * Asset image tag for Hexo.
  *
- * Syntax:
- *   {% asset_img [class names] slug [width] [height] [title text [alt text]]%}
+ * This tag is used to insert an image asset into a post.
+ *
+ * @param {Hexo} ctx - The Hexo instance used for rendering the image.
+ * @returns {Function} A function that processes the asset image tag.
  */
 export = (ctx: Hexo) => {
   const PostAsset = ctx.model('PostAsset');
@@ -14,11 +16,9 @@ export = (ctx: Hexo) => {
   return function assetImgTag(args: string[]) {
     const len = args.length;
 
-    // Find image URL
     for (let i = 0; i < len; i++) {
       const asset = PostAsset.findOne({post: this._id, slug: args[i]});
       if (asset) {
-        // img tag will call url_for so no need to call it here
         args[i] = encodeURL(new URL(asset.path, ctx.config.url).pathname);
         return img(ctx)(args);
       }
