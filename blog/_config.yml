@@ -3,12 +3,21 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
+<<<<<<< HEAD
 title: Hexo
 subtitle: ''
 description: ''
 keywords:
 author: John Doe
 language: en
+=======
+title: Bienvenido a Hexo
+subtitle: ''
+description: ''
+keywords:
+author: Los Figurines
+language: es
+>>>>>>> ce7cf6f9e34b08606ef2819e1bd53975c52a06b7
 timezone: ''
 
 # URL
@@ -96,7 +105,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: hexo-theme-light
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment

@@ -100,6 +100,14 @@ const createLoadThemeRoute = function(generatorResult: NormalPageGenerator | Nor
   };
 };
 
+/**
+ * Delays the execution of a function until a specified wait time has passed 
+ * since the last time the debounced function was invoked.
+ *
+ * @param {Function} func - The function to delay.
+ * @param {number} wait - The number of milliseconds to delay execution.
+ * @returns {Function} - The debounced version of the input function.
+ */
 function debounce(func: () => void, wait: number): () => void {
   let timeout: NodeJS.Timeout;
   return function() {

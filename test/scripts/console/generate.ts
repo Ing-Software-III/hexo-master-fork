@@ -29,24 +29,27 @@ describe('generate', () => {
     }
   });
 
-  const testGenerate = async (options?: any) => {
+
+  const writeTestFiles = async () => {
     await Promise.all([
       // Add some source files
       writeFile(join(hexo.source_dir, 'test.txt'), 'test'),
       writeFile(join(hexo.source_dir, 'faz', 'yo.txt'), 'yoooo'),
       // Add some files to public folder
       writeFile(join(hexo.public_dir, 'foo.txt'), 'foo'),
-      writeFile(join(hexo.public_dir, 'bar', 'boo.txt'), 'boo'),
-      writeFile(join(hexo.public_dir, 'faz', 'yo.txt'), 'yo')
+      writeFile(join(hexo.public_dir, 'bar', 'boo.txt'), 'booo'),
+      writeFile(join(hexo.public_dir, 'bar', 'yo.txt'), 'yo')
     ]);
-    await generate(options);
-
+  };
+  
+  const verifyFiles = async () => {
     const result = await Promise.all([
       readFile(join(hexo.public_dir, 'test.txt')),
       readFile(join(hexo.public_dir, 'faz', 'yo.txt')),
       exists(join(hexo.public_dir, 'foo.txt')),
       exists(join(hexo.public_dir, 'bar', 'boo.txt'))
     ]);
+  
     // Check the new file
     result[0].should.eql('test');
     // Check the updated file
@@ -54,6 +57,12 @@ describe('generate', () => {
     // Old files should not be deleted
     result[2].should.be.true;
     result[3].should.be.true;
+  };
+
+  const testGenerate = async options => {
+    await writeTestFiles();
+    await generate(options);
+    await verifyFiles();
   };
 
   it('default', () => testGenerate());
@@ -328,32 +337,10 @@ describe('generate - watch (delete)', () => {
   });
 
   const testGenerate = async options => {
-    await Promise.all([
-      // Add some source files
-      writeFile(join(hexo.source_dir, 'test.txt'), 'test'),
-      writeFile(join(hexo.source_dir, 'faz', 'yo.txt'), 'yoooo'),
-      // Add some files to public folder
-      writeFile(join(hexo.public_dir, 'foo.txt'), 'foo'),
-      writeFile(join(hexo.public_dir, 'bar', 'boo.txt'), 'boo'),
-      writeFile(join(hexo.public_dir, 'faz', 'yo.txt'), 'yo')
-    ]);
+    await writeTestFiles();
     await generate(options);
-
-    const result = await Promise.all([
-      readFile(join(hexo.public_dir, 'test.txt')),
-      readFile(join(hexo.public_dir, 'faz', 'yo.txt')),
-      exists(join(hexo.public_dir, 'foo.txt')),
-      exists(join(hexo.public_dir, 'bar', 'boo.txt'))
-    ]);
-    // Check the new file
-    result[0].should.eql('test');
-    // Check the updated file
-    result[1].should.eql('yoooo');
-    // Old files should not be deleted
-    result[2].should.be.true;
-    result[3].should.be.true;
+    await verifyFiles();
   };
-
   it('watch - delete', async () => {
     await testGenerate({ watch: true });
 
