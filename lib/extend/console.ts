@@ -70,31 +70,31 @@ class Console {
   register(name: string, desc: string | Option | AnyFn, options?: Option | AnyFn, fn?: AnyFn): void {
     if (!name) throw new TypeError('name is required');
 
-    if (!fn) {
-      if (options) {
-        if (typeof options === 'function') {
-          fn = options;
+      if (!fn) {
+    if (options) {
+      if (typeof options === 'function') {
+        fn = options;
 
-          if (typeof desc === 'object') { // name, options, fn
-            options = desc;
-            desc = '';
-          } else { // name, desc, fn
-            options = {};
-          }
-        } else {
-          throw new TypeError('fn must be a function');
-        }
-      } else {
-        // name, fn
-        if (typeof desc === 'function') {
-          fn = desc;
-          options = {};
+        if (typeof desc === 'object') { // name, options, fn
+          options = desc;
           desc = '';
-        } else {
-          throw new TypeError('fn must be a function');
+        } else { // name, desc, fn
+          options = {};
         }
+
+      } else {
+        throw new TypeError('fn must be a function');
       }
+
+    } else if (typeof desc === 'function') {
+      // name, fn
+      fn = desc;
+      options = {};
+      desc = '';
+    } else {
+      throw new TypeError('fn must be a function');
     }
+  }
 
     if (fn.length > 1) {
       fn = Promise.promisify(fn);
